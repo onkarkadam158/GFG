@@ -45,45 +45,31 @@ class Solution {
         }
         return res;
     }
-    int getCount(vector<int> &stations, int k,int n,long double mid){
+    int getCount(vector<int> &stations, int k,int n, double mid){
         int count=0;
         for(int i=1;i<n;i++){
-            int cnt=(stations[i]-stations[i-1])/mid;
-                // cnt = ceil((stations[i]-stations[i-1])/mid) - 1;
-                // if(mid*cnt==((stations[i]-stations[i-1])/mid) ){
-                //     cnt--;
-                // }
-            count+=max(0,cnt);
+            count += max(0, (int)((stations[i]-stations[i-1])/mid));
         }
         return count;
     }
-    long double binarySearchSolution(vector<int> &stations, int k,int n){
-        long double low=0.000000,high=0.0000000,ans=0.000000;
+    double binarySearchSolution(vector<int> &stations, int k,int n){
+        double low=0.0,high=0.0;
         for(int i=1;i<n;i++) {
-            long double temp=(stations[i]-stations[i-1]);
-            high=max(high,temp);
+            high=max(high,(double) (stations[i]-stations[i-1]));
         }
+        double ans=high;
         while((high-low) > 1e-6){
-            long double mid=(high+low)/2.0;
+            double mid=low+(high-low)/2.0;
             int count=getCount(stations,k,n,mid);
-            if(count>k){
-                low=mid;
-            }
-            else{
+            if(count<=k){
                 ans=mid;
                 high=mid;
             }
+            else{
+                low=mid;
+            }
         }
         return ans;
-    }
-    
-    bool isPossible(const vector<int>&s, double mid, int k) {
-        int n = s.size();
-        int cnt = 0;
-        for (int i = 1; i < n; ++i) {
-            cnt += max(0, (int)((s[i]-s[i-1])/mid));
-        }
-        return cnt <= k;
     }
     double findSmallestMaxDist(vector<int> &stations, int k) {
         // Code here
@@ -93,27 +79,7 @@ class Solution {
         
         // return bruteforce(stations,k,n); //Time O(n*k) polynomial space O(n)
         
-        // return binarySearchSolution(stations,k,n); //Time O(n*logn)
-        
-        double st = 0.0;
-        double en = 0.0;
-        
-        // Find the maximum initial gap
-        for (int i = 1; i < n; ++i) {
-            en = max(en, (double)(stations[i] - stations[i - 1]));
-        }
-        double ans = en ;  
-        // Binary search for the smallest maximum distance
-        while (en - st > 1e-6) {
-            double mid = st + (en - st) / 2.0;
-            if (isPossible(stations, mid, k)) {
-                ans = mid; 
-                en = mid;
-            } else {
-                st = mid;
-            }
-        }
-        return ans;
+        return binarySearchSolution(stations,k,n); //Time O(n*logn)
     }
 };
 

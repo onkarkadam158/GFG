@@ -15,10 +15,8 @@ class Solution
 	    }
 	    st.push(i);
 	}
-	//Function to return list containing vertices in Topological order. 
-	vector<int> topoSort(int V, vector<int> adj[]) 
-	{
-	    // code here 
+	vector<int> dfsSolution(int V, vector<int> adj[]){
+	    
 	    vector<int>res;
 	    vector<int>vis(V,0);
 	    stack<int>st;
@@ -34,6 +32,46 @@ class Solution
 	        st.pop();
 	    }
 	    return res;
+	}
+	//solution 2
+	vector<int> kahnsAlgorithmSolution(int V, vector<int> adj[]){
+	   vector<int>res;
+	   vector<int>indegree(V,0);
+	   for(int i=0 ; i<V; i++){
+	       for(int j=0;j<adj[i].size();j++){
+	           int node=adj[i][j];
+	           indegree[node]++;
+	       }
+	   }
+	   queue<int>que;
+	   for(int i=0;i<V;i++){
+	       if(indegree[i]==0){
+	           que.push(i);
+	       }
+	   }
+	   while(!que.empty()){
+	       int curr=que.front();
+    	   res.push_back(curr);
+	       que.pop();
+	       for(auto a:adj[curr]){
+	           if(indegree[a]>0){
+	               indegree[a]--;
+    	           if(indegree[a]==0){
+    	               que.push(a);
+    	           }
+	           }
+	       }
+	   }
+	   // for(auto a:res)cout<<a<<" ";
+	    return res;
+	}
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    // code here 
+	   // return dfsSolution(V,adj);
+	    
+	    return kahnsAlgorithmSolution(V,adj);
 	}
 };
 

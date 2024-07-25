@@ -46,12 +46,38 @@ class Solution
         
         return distance;
     }
+    vector <int> setSolution(int V, vector<vector<int>> adj[], int S){
+        set<pair<int,int>>st;
+        vector<int>dist(V,1e9);
+        st.insert({0,S});
+        dist[S]=0;
+        while(!st.empty()){
+            auto curr=*st.begin();
+            int currDist=curr.first;
+            int currNode=curr.second;
+            st.erase(curr);
+            for(auto neigh:adj[currNode]){
+                int neighNode=neigh[0],neighDist=neigh[1];
+                if(currDist+neighDist<dist[neighNode]){
+                    if(dist[neighNode]!=1e9) {
+                        st.erase({dist[neighNode],neighNode});
+                    }
+                    dist[neighNode]=currDist+neighDist;
+                    st.insert({dist[neighNode],neighNode});
+                }
+            }
+        }
+        return dist;
+    }
+    
     vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
     {
         // Code here
         // return queueSolution(V,adj,S);
         
-        return priorityQueueSolution(V,adj,S);
+        // return priorityQueueSolution(V,adj,S);
+        
+        return setSolution(V,adj,S);
     }
 };
 

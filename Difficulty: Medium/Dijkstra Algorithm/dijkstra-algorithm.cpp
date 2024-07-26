@@ -9,18 +9,19 @@ class Solution
 	//Function to find the shortest distance of all the vertices
     //from the source vertex S.
      vector <int> queueSolution(int V, vector<vector<int>> adj[], int S){
-        vector<int>vis(V,0),dist(V,1e9);
-        queue<int>que;
-        dist[S]=0,vis[S]=1;
-        que.push(S);
+        vector<int>dist(V,1e9);
+        queue<pair<int,int>>que;
+        dist[S]=0;
+        que.push({0,S});
         while(!que.empty()){
-            int curr=que.front();
+            int currDist=que.front().first;
+            int currNode=que.front().second;
             que.pop();
-            for(auto neighbor:adj[curr]){
+            for(auto neighbor:adj[currNode]){
                 int node=neighbor[0],distance=neighbor[1];
-                if(!vis[node]){
-                    dist[node]=min(dist[node],distance+dist[curr]);
-                    vis[node]=1;
+                if(currDist+distance < dist[node]){
+                    dist[node]=currDist+distance;
+                    que.push({dist[node],node});
                 }
             }
         }
@@ -73,7 +74,7 @@ class Solution
     vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
     {
         // Code here
-        // return queueSolution(V,adj,S);
+        return queueSolution(V,adj,S);//does not work
         
         // return priorityQueueSolution(V,adj,S);
         

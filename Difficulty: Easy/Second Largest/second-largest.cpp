@@ -14,13 +14,16 @@ class Solution {
         // Code Here
         int n=arr.size();
 	    int max1=-1,max2=-1;
-	    for(int i=0;i<n;i++)
-	        if(arr[i]>=max1)
-	            max1=arr[i];
-	    for(int i=0;i<n;i++)
-	        if(arr[i]!=max1 and arr[i]>=max2)
-	            max2=arr[i];
-	   
+	    for(auto a:arr){
+	        if(a>max1){
+	            max2=max1;
+	            max1=a;
+	        }
+	        else if(a>max2 and a!=max1){
+	            max2=a;
+	        }
+	        
+	    }
 	    return max2;
     }
 };
